@@ -1,0 +1,91 @@
+﻿@page "/quiz"
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@using QuizzProject.Models;
+@using QuizWithBlazor.Data;
+
+<div class="page">
+<h3>QUESTION NR @questionNumber</h3>
+<h1>@text</h1>
+
+
+@foreach(var answer in answersToCheck)
+{
+            <label>
+                @if (!isMultipleAnswer)
+                {
+                    <input type="radio"
+                           name="checkanswers"
+                           checked="@(answer.IsChecked)"
+                    @onchange="@(()=>answer.IsChecked=(!answer.IsChecked))" />
+                    @answer.Text
+                }
+                else
+                {
+                    <input type="checkbox"
+                           name="answers"
+                    @bind="answer.IsChecked" />
+                    @answer.Text
+                }
+            </label>
+}
+    <div class="buttons">
+        <button @onclick="PreviousQuestion">Previous</button>
+        <button @onclick="NextQuestion">@buttonText</button>
+    </div>
+</div>
+
+
+@code {
+    private string text = "";
+    private Question? currentQuestion { get; set; }
+    private List<AnswerToCheck> answersToCheck { get; set; }
+    private bool isMultipleAnswer { get; set; }
+    private int questionNumber { get; set; }
+    private string buttonText { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentQuestion=AppService.GetCurrentQuestion();
+        if (currentQuestion != null)
+        {
+            text = currentQuestion.Text.ToString();
+            answersToCheck = currentQuestion.Answers.Select(answer => new AnswerToCheck
+                {
+                    Text = answer.Text.ToString(),
+                    IsChecked = false
+                }).ToList();
+
+            isMultipleAnswer = (currentQuestion.Answers.Where(x => x.IsCorrect).Count() > 1);
+        }
+        else
+        {
+            NavigationManager.NavigateTo("finish");
+        }
+
+        questionNumber = AppService.index+1;
+
+        if (questionNumber == 5)
+            buttonText = "Finish Quiz";
+        else
+            buttonText = "Next";
+    }
+
+
+    private void PreviousQuestion()
+    {
+        if(AppService.index>0)
+            AppService.index--;
+
+        OnInitializedAsync();
+    }
+
+    private void NextQuestion()
+    {       
+        AppService.CheckAnswers(answersToCheck.Select(x => x.IsChecked).ToList());
+        AppService.index++;
+        OnInitializedAsync(); 
+    }
+
+    
+}

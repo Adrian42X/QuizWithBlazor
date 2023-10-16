@@ -1,0 +1,41 @@
+﻿@page "/finish"
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime js;
+@using QuizzProject.Models;
+@using QuizWithBlazor.Data;
+
+<NavigationLock OnBeforeInternalNavigation="NavigationPass" />
+
+<h3>Finish</h3>
+<h2>Player name: @AppService.PlayerName</h2>
+<h2>Difficulty: @AppService.Difficulty</h2>
+<h2>Score: @AppService.Score /5</h2>
+
+<button onclick="@NewQuiz">New Quiz</button>
+<button onclick="@GoToStats">Stats</button>
+
+@code {
+    private bool canNavigate = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        AppService.AddStats();
+    }
+
+    private void NewQuiz()
+    {
+        AppService.NewQuiz();
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void GoToStats()
+    {
+        NavigationManager.NavigateTo("stats");
+    }
+
+    private void NavigationPass(LocationChangingContext context)
+    {
+        if (context.TargetLocation == "https://localhost:7177/quiz")
+            context.PreventNavigation();
+    }
+}

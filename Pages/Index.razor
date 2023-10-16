@@ -1,0 +1,41 @@
+﻿@page "/"
+@inject NavigationManager NavigationManager
+@using QuizWithBlazor.Data
+
+
+<PageTitle>Quiz Application</PageTitle>
+
+<h1>Quiz Application</h1>
+
+<div>
+    <div>
+        <label for="playerName">Player name :</label>
+        <input id="playerName" @bind="playerName" />
+    </div>
+
+    <div>
+        <label for="quizDifficulty">Select quiz difficulty :</label>
+        <select id="quizDifficulty" @bind="quizDifficulty">
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+        </select>
+    </div>
+
+    <button @onclick="StartQuiz">Start Quiz</button>
+</div>
+
+@code {
+    private string playerName { get; set; }
+    private string quizDifficulty = "Easy";
+
+    private void StartQuiz()
+    {
+        if (playerName != null && quizDifficulty != null)
+        { 
+            AppService.Start(quizDifficulty, playerName);
+            NavigationManager.NavigateTo("quiz");
+        }
+
+    }
+}

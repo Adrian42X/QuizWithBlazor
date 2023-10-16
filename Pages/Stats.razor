@@ -1,0 +1,33 @@
+﻿@page "/stats"
+@using QuizzProject.Models;
+@using QuizWithBlazor.Data;
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Player Name</th>
+            <th>Score</th>
+            <th>Played quizzes</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in players)
+        {
+            <tr>
+                <td>@player.Name</td>
+                <td>@player.Score</td>
+                <td>@player.NrOfPlayedQuizzes</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    private List<Player> players;
+
+    protected override async Task OnInitializedAsync()
+    {
+        players = AppService.Players;
+    }
+}

@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "QuizWithBlazor/1.0.0": {
+        "dependencies": {
+          "QuizzProject": "1.0.0"
+        },
+        "runtime": {
+          "QuizWithBlazor.dll": {}
+        }
+      },
+      "QuizzProject/1.0.0": {
+        "runtime": {
+          "QuizzProject.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "QuizWithBlazor/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "QuizzProject/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
